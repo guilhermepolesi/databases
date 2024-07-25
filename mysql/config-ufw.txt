@@ -1,0 +1,55 @@
+# This file contains commands for managing MySQL and firewall settings on a Linux system.
+
+# Start MySQL
+sudo systemctl start mysql
+
+# Check the status of MySQL
+sudo systemctl status mysql
+
+# Check the ports used
+sudo netstat -tuln
+
+# Check specific ports
+sudo netstat -tuln | grep 3306
+
+# Alternative with ss
+sudo ss -tuln | grep 3306
+
+# Check MySQL status using mysqladmin
+mysqladmin -u root -p status
+
+# Check MySQL version using mysqladmin
+mysqladmin -u root -p version
+
+# Connect to MySQL as root
+mysql -u root -p
+
+# Exit MySQL
+mysql> EXIT
+
+# Check the status of UFW (FIREWALL)
+sudo ufw status verbose
+
+# Allow local access to port 3306 (MySQL)
+sudo ufw allow from 127.0.0.1 to any port 3306
+
+# Deny external access to port 3306
+sudo ufw deny from any to any port 3306
+
+# Reload UFW to apply the new rules
+sudo ufw reload
+
+# Check the applied rules
+sudo ufw status numbered
+
+# Final Check
+
+# After executing the above commands, the output of sudo ufw status numbered should show something like:
+
+# Status: active
+
+#   To                      Action   From
+#   --                      ------   ----
+# [ 1] 3306                    ALLOW IN  127.0.0.1
+# [ 2] 3306                    DENY IN   Anywhere
+
