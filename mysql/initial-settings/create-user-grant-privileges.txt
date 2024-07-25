@@ -1,0 +1,25 @@
+# This file contains commands to manage MySQL and user access on a Linux system.
+
+# Connect to MySQL as root
+mysql -u root -p
+
+-- Create a new user
+CREATE USER 'new_user'@'localhost' IDENTIFIED BY 'secret_password';
+
+-- To ensure the user can only manage databases created by them
+GRANT CREATE, DROP, ALTER ON *.* TO 'new_user'@'localhost';
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON *.* TO 'new_user'@'localhost';
+
+-- Grant all privileges on databases created by the user
+GRANT ALL PRIVILEGES ON `new_user%`.* TO 'new_user'@'localhost';
+
+-- Apply the changes
+FLUSH PRIVILEGES;
+
+-- Exit MySQL
+EXIT;
+
+# Connect as the new user
+mysql -u new_user -p
+
