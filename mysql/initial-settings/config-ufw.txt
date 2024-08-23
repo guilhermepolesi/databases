@@ -25,7 +25,7 @@ mysqladmin -u root -p version
 mysql -u root -p
 
 # Exit MySQL
-mysql> EXIT
+EXIT
 
 # Check the status of UFW (FIREWALL)
 sudo ufw status verbose
