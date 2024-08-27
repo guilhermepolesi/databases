@@ -1,0 +1,98 @@
+# SQL Server Installation and Configuration on Ubuntu
+# This guide is adapted from Microsoft's official documentation:
+# https://learn.microsoft.com/pt-br/sql/linux/quickstart-install-connect-ubuntu?view=sql-server-ver16&tabs=ubuntu2004
+
+# Check if a SQL Server repository is already registered
+sudo cat /etc/apt/sources.list
+
+# If an old repository is found, remove it
+sudo add-apt-repository -r 'deb [arch=amd64] https://packages.microsoft.com/ubuntu/22.04/mssql-server-2022 jammy main'
+
+# Import the public GPG keys for the repository
+curl https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
+
+# Configure the new repository for SQL Server installations and updates
+sudo add-apt-repository "$(curl https://packages.microsoft.com/config/ubuntu/22.04/mssql-server-2022.list)"
+
+# Update the package list to include the new repository
+sudo apt-get update
+
+# Download and register the SQL Server repository
+curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg
+
+# If there is an issue with the public key, use the following command
+curl https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
+
+# Manually download and register the SQL Server repository
+curl -fsSL https://packages.microsoft.com/config/ubuntu/22.04/mssql-server-2022.list | sudo tee /etc/apt/sources.list.d/mssql-server-2022.list
+
+# Install SQL Server
+sudo apt-get update
+sudo apt-get install -y mssql-server
+
+# Configure SQL Server
+sudo /opt/mssql/bin/mssql-conf setup
+
+# During setup, set a strong password for the 'sa' account and choose your SQL Server edition (Evaluation, Developer, or Express).
+# Password requirements: minimum of 8 characters, including uppercase and lowercase letters, digits, and/or non-alphanumeric symbols.
+
+# Verify if the SQL Server service is running
+systemctl status mssql-server --no-pager
+
+# Install SQL Server command-line tools (sqlcmd and bcp)
+
+# Import the public GPG keys for the tools repository
+curl https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
+
+# Register the repository for SQL Server tools
+curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
+
+# Update the package list and install SQL Server tools along with unixODBC
+sudo apt-get update
+sudo apt-get install mssql-tools18 unixodbc-dev
+
+# To update to the latest version of SQL Server tools
+sudo apt-get update
+sudo apt-get install mssql-tools18
+
+# Optionally, add /opt/mssql-tools18/bin/ to your PATH environment variable in Bash shell
+
+# For login shells, modify ~/.bash_profile
+echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bash_profile
+source ~/.bash_profile
+
+# For non-login interactive shells, modify ~/.bashrc
+echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
+source ~/.bashrc
+
+# After setting up SQL Server, create a new sysadmin login and disable the 'sa' login for better security.
+
+# Connect to SQL Server using sqlcmd
+# For local connections, specify localhost as the server name, sa as the username, and the corresponding password
+sqlcmd -S localhost -U sa -P '<YourPassword>'
+
+# To omit the password and prompt for it, simply omit the -P option
+sqlcmd -S localhost -U sa
+
+# If you encounter issues with certificate conflicts, use the -C option
+sqlcmd -S localhost -U sa -C
+
+# Create a new login and add it to the sysadmin server role
+CREATE LOGIN new_user WITH PASSWORD = 'YourStrongPassword';
+ALTER SERVER ROLE sysadmin ADD MEMBER new_user;
+
+# Replace 'new_user' with the desired username and 'YourStrongPassword' with a strong password that meets SQL Server's complexity requirements.
+
+# Test the new login to ensure it has the appropriate permissions
+
+# After confirming that the new login works correctly, disable the 'sa' login
+ALTER LOGIN sa DISABLE;
+
+# To re-enable the 'sa' login if needed
+ALTER LOGIN sa ENABLE;
+
+To end the sqlcmd session, type QUIT
+
+# If you encounter issues with certificate conflicts, use the -C option
+sqlcmd -S localhost -U new_user -C
+

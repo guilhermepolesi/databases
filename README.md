@@ -1,4 +1,4 @@
-# Database repository
+# Database Repository
 
 Welcome to the Database Repository! This repository is dedicated to providing a comprehensive collection of resources and examples related to database systems. Here you will find a lot of information about modern database management systems (DBMSs) and the SQL language used to manipulate and manage databases.
 
