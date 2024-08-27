@@ -22,15 +22,15 @@ GO
 -- Create a new table named 'my_table'
 CREATE TABLE my_table (
     id INT IDENTITY(1,1) PRIMARY KEY, 
-    name NVARCHAR(100) NOT NULL,
+    username NVARCHAR(100) NOT NULL,
     class NVARCHAR(100) NOT NULL,
     event_timestamp DATETIME DEFAULT GETDATE() 
 );
 GO
 
 -- Insert data into the 'my_table' table
-INSERT INTO my_table (name, class) VALUES ('Yusuke', 'Human');
-INSERT INTO my_table (name, class) VALUES ('Kuwabara', 'Bad Boy'), ('Kurama', 'Youkai');
+INSERT INTO my_table (username, class) VALUES ('Yusuke', 'Human');
+INSERT INTO my_table (username, class) VALUES ('Kuwabara', 'Bad Boy'), ('Kurama', 'Youkai');
 GO
 
 -- Select all records from the 'my_table' table
