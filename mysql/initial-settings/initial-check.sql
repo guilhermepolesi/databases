@@ -1,31 +1,31 @@
--- Verificar a versão do MySQL
+-- Check MySQL version
 SELECT VERSION();
 
--- Listar todos os bancos de dados
+-- List all databases
 SHOW DATABASES;
 
--- Selecionar um banco de dados
+-- Select a database
 USE my_database;
 
--- Listar todas as tabelas no banco de dados selecionado
+-- List all tables in the selected database
 SHOW TABLES;
 
--- Mostrar a estrutura de uma tabela
+-- Show the structure of a table
 DESCRIBE my_table;
 
--- Listar todos os usuários
+-- List all users
 SELECT User, Host FROM mysql.user;
 
--- Verificar privilégios do usuário atual
+-- Check current user's privileges
 SHOW GRANTS FOR CURRENT_USER;
 
--- Verificar a configuração de segurança
+-- Check security configuration
 SHOW VARIABLES LIKE 'validate_password%';
 
--- Verificar a integridade de uma tabela
+-- Check the integrity of a table
 CHECK TABLE my_table;
 
--- Reparar uma tabela, se necessário
+-- Repair a table, if needed
 REPAIR TABLE my_table;
 
 /*
